@@ -57,6 +57,37 @@ var GLT_COLOR_KEYS = [
     ['accent', 'Accent / liens'], ['info', 'Info'], ['success', 'Succès'], ['warning', 'Avertissement'], ['danger', 'Erreur']
 ];
 
+// Modifications de l'interface : [clé, libellé, description, groupe, actif par défaut]
+var GLT_FEATURES = [
+    ['cards', 'Widgets en cartes', 'Coins arrondis, bordure fine et ombre douce', 'Apparence', true],
+    ['quiet', 'Actions discrètes', 'Les icônes des widgets apparaissent au survol', 'Apparence', true],
+    ['buttons', 'Boutons modernes', 'Arrondis, sans dégradé, focus visible', 'Apparence', true],
+    ['inputs', 'Champs modernes', 'Arrondis, anneau de focus à la couleur d\'accent', 'Apparence', true],
+    ['nav', 'Navigation épurée', 'Barre du haut translucide, liens arrondis', 'Apparence', true],
+    ['scrollbars', 'Barres de défilement fines', '', 'Apparence', true],
+    ['tables', 'Tableaux modernes', 'En-têtes discrets, chiffres alignés', 'Tableaux', true],
+    ['sticky', 'En-têtes fixes', 'L\'en-tête reste visible quand on défile', 'Tableaux', true],
+    ['hover', 'Survol des lignes', '', 'Tableaux', true],
+    ['level', 'Niveau en liseré', 'Liseré coloré et fond léger selon ERROR / WARN, au lieu de lignes pleines', 'Tableaux', true],
+    ['zebra', 'Lignes alternées', '', 'Tableaux', false],
+    ['compact', 'Lignes compactes', '', 'Tableaux', false],
+    ['wide', 'Pleine largeur', 'Supprime la largeur maximale des pages', 'Mise en page', true],
+    ['throughput', 'Masquer le débit in / out', 'Compteur de messages de la barre du haut', 'Mise en page', false],
+    ['launcher', 'Bouton flottant', 'Accès rapide au personnalisateur, en bas à droite', 'Mise en page', true]
+];
+
+// Pages proposées dans la palette de commandes (Ctrl+K)
+var GLT_PAGES = [
+    ['Recherche', '/search', 'search'], ['Streams', '/streams', 'streams'], ['Alertes', '/alerts', 'alerts events'],
+    ['Définitions d\'événements', '/alerts/definitions', 'event definitions'], ['Notifications', '/alerts/notifications', 'notifications'],
+    ['Dashboards', '/dashboards', 'dashboards tableaux de bord'], ['Vue d\'ensemble système', '/system/overview', 'system overview'],
+    ['Nœuds', '/system/nodes', 'nodes'], ['Inputs', '/system/inputs', 'inputs entrées'], ['Outputs', '/system/outputs', 'outputs sorties'],
+    ['Index', '/system/indices', 'indices index sets'], ['Pipelines', '/system/pipelines', 'pipelines rules règles'],
+    ['Lookup tables', '/system/lookuptables', 'lookup tables'], ['Utilisateurs', '/system/users', 'users utilisateurs'],
+    ['Content packs', '/system/contentpacks', 'content packs'], ['Configuration', '/system/configurations', 'configurations'],
+    ['Sidecars', '/system/sidecars', 'sidecars collectors']
+];
+
 var GLT_DEFAULTS = {
     enabled: true,
     theme: 'lens',
@@ -64,12 +95,26 @@ var GLT_DEFAULTS = {
     sourceMode: 'auto',      // 'auto' | 'light' | 'dark' : thème actuellement réglé dans Graylog
     fontUi: '',
     fontMono: '',
-    compact: false,
     customCss: '',
+    skin: true,              // modifications de l'interface
+    features: Object.fromEntries(GLT_FEATURES.map((f) => [f[0], f[4]])),
+    radius: 10,
+    levelField: 'level',
+    hidden: [],              // [{ selector, label }]
+    envs: {},                // { hôte: { label, color, ribbon, title, favicon } }
+    favorites: [],           // [{ name, url }]
+    searchWindow: 900,       // plage (s) des recherches lancées depuis la palette
     sites: []                // origines supplémentaires (https://hôte)
 };
 
 function gltResolveTheme(cfg) {
     if (cfg && cfg.theme === 'custom') return Object.assign({}, GLT_THEMES.lens, cfg.custom || {}, { name: 'Personnalisé' });
     return GLT_THEMES[cfg && cfg.theme] || GLT_THEMES.lens;
+}
+
+function gltFeature(cfg, key) {
+    const f = (cfg && cfg.features) || {};
+    if (key in f) return !!f[key];
+    const d = GLT_FEATURES.find((x) => x[0] === key);
+    return d ? d[4] : false;
 }

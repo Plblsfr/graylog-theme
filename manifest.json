@@ -1,27 +1,63 @@
 {
   "manifest_version": 3,
   "name": "Graylog Theme",
-  "version": "1.0.0",
-  "description": "Change le thème de Graylog : palettes prêtes à l'emploi ou personnalisées, polices, densité, CSS perso.",
-  "permissions": ["storage", "scripting"],
-  "optional_host_permissions": ["https://*/*", "http://*/*"],
-  "background": { "service_worker": "background.js" },
+  "version": "2.0.0",
+  "description": "Refait l'interface de Graylog : thèmes, widgets en cartes, tableaux lisibles, palette de commandes (Ctrl+K), mode focus, éléments masqués, badge d'environnement.",
+  "permissions": [
+    "storage",
+    "scripting",
+    "activeTab"
+  ],
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "popup.html",
     "default_title": "Graylog Theme",
-    "default_icon": { "16": "icons/16.png", "32": "icons/32.png", "48": "icons/48.png" }
+    "default_icon": {
+      "16": "icons/16.png",
+      "32": "icons/32.png",
+      "48": "icons/48.png"
+    }
   },
-  "icons": { "16": "icons/16.png", "32": "icons/32.png", "48": "icons/48.png", "128": "icons/128.png" },
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
   "commands": {
     "toggle-theme": {
-      "suggested_key": { "default": "Alt+Shift+T" },
+      "suggested_key": {
+        "default": "Alt+Shift+T"
+      },
       "description": "Activer / désactiver le thème"
+    },
+    "open-customizer": {
+      "suggested_key": {
+        "default": "Alt+Shift+C"
+      },
+      "description": "Ouvrir le personnalisateur dans la page"
     }
   },
   "content_scripts": [
     {
-      "matches": ["https://graylog.moveon-hotelbb.com/*"],
-      "js": ["themes.js", "engine.js"],
+      "matches": [
+        "https://graylog.moveon-hotelbb.com/*"
+      ],
+      "js": [
+        "themes.js",
+        "engine.js",
+        "ui.js",
+        "skin.js"
+      ],
+      "css": [
+        "skin.css"
+      ],
       "run_at": "document_start"
     }
   ]

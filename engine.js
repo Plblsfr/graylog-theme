@@ -352,6 +352,7 @@
     // Styles en ligne (graphiques SVG, éléments stylés en JS) : neutres uniquement
     // =====================================================================
     function processEl(el) {
+        if (el.closest('[data-glt-ui]')) return;
         const style = el.getAttribute('style');
         const fill = el.getAttribute('fill');
         const stroke = el.getAttribute('stroke');
@@ -422,13 +423,12 @@
     function baseCss() {
         const t = pal.raw;
         const vars = GLT_COLOR_KEYS.map(([k]) => `--glt-${k}: ${t[k]};`).join(' ');
-        let css = `:root { ${vars} color-scheme: ${pal.dark ? 'dark' : 'light'}; }
+        let css = `:root { ${vars} --glt-radius: ${Number(cfg.radius) >= 0 ? Number(cfg.radius) : 10}px; color-scheme: ${pal.dark ? 'dark' : 'light'}; }
 html { scrollbar-color: ${t.border} transparent; }
 ::selection { background: ${fmt({ ...pal.accent, a: pal.dark ? 0.35 : 0.22 })}; }
 `;
         if (safe(cfg.fontUi)) css += `html body, html body :is(button, input, select, textarea) { font-family: ${safe(cfg.fontUi)}; }\n`;
         if (safe(cfg.fontMono)) css += `code, pre, kbd, samp, tt, .ace_editor, .ace_editor * { font-family: ${safe(cfg.fontMono)} !important; }\n`;
-        if (cfg.compact) css += `table td, table th { padding-top: 3px !important; padding-bottom: 3px !important; line-height: 1.35 !important; }\n`;
         if (cfg.customCss) css += `\n/* CSS personnalisé */\n${cfg.customCss}\n`;
         return css;
     }
@@ -490,10 +490,16 @@ html { scrollbar-color: ${t.border} transparent; }
         ['glt-base', 'glt-boot'].forEach((id) => { const n = document.getElementById(id); if (n) n.remove(); });
     }
 
+    let paletteKey = '';
+
     function applyConfig(next) {
         const prevMode = cfg && cfg.sourceMode;
         cfg = next;
-        if (!cfg.enabled) { if (active) disable(); return; }
+        if (!cfg.enabled) { if (active) disable(); paletteKey = ''; return; }
+        // Seuls polices / CSS perso ont changé : pas besoin de repasser sur toutes les règles
+        const key = JSON.stringify([cfg.theme, cfg.theme === 'custom' ? cfg.custom : null, cfg.sourceMode]);
+        if (active && key === paletteKey) { styleEl('glt-base').textContent = baseCss(); return; }
+        paletteKey = key;
         if (prevMode !== undefined && prevMode !== cfg.sourceMode && active) {
             // Changement du thème d'origine : on repart des valeurs initiales
             disable();
@@ -542,7 +548,7 @@ html { scrollbar-color: ${t.border} transparent; }
     chrome.storage.local.get(GLT_DEFAULTS, (c) => whenRoot(() => applyConfig(c)));
     chrome.storage.onChanged.addListener((changes, area) => {
         if (area !== 'local') return;
-        if (Object.keys(changes).every((k) => k === 'sites')) return;
+        if (Object.keys(changes).every((k) => ['sites', 'recents', 'hidden', 'envs', 'favorites', 'features', 'skin', 'levelField', 'searchWindow', 'radius', 'focus'].includes(k))) return;
         chrome.storage.local.get(GLT_DEFAULTS, applyConfig);
     });
 })();

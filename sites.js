@@ -17,7 +17,7 @@ async function gltSyncSites(sites) {
         if (existing.length) await chrome.scripting.unregisterContentScripts({ ids: [GLT_SCRIPT_ID] });
         return;
     }
-    const def = { id: GLT_SCRIPT_ID, matches: granted, js: ['themes.js', 'engine.js'], runAt: 'document_start', persistAcrossSessions: true };
+    const def = { id: GLT_SCRIPT_ID, matches: granted, js: ['themes.js', 'engine.js', 'ui.js', 'skin.js'], css: ['skin.css'], runAt: 'document_start', persistAcrossSessions: true };
     if (existing.length) await chrome.scripting.updateContentScripts([def]);
     else await chrome.scripting.registerContentScripts([def]);
 }

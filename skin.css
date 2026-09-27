@@ -1,0 +1,178 @@
+/* Graylog Theme — modifications de l'interface.
+ * Chaque bloc ne s'applique que si sa classe est posée sur <html> (html.glt-f-<clé>) : tout se coupe instantanément.
+ * Les couleurs viennent des variables du thème (--glt-*), posées par engine.js. */
+
+html.glt-skin {
+    --glt-r: var(--glt-radius, 10px);
+    --glt-r-sm: calc(var(--glt-r) * 0.6);
+    --glt-line: var(--glt-border, rgba(128, 128, 128, .3));
+    --glt-shadow: 0 1px 2px rgba(15, 23, 42, .06), 0 6px 20px rgba(15, 23, 42, .07);
+    --glt-shadow-lg: 0 12px 40px rgba(15, 23, 42, .18);
+    --glt-tint: color-mix(in srgb, var(--glt-text, #888) 6%, transparent);
+    --glt-accent-soft: color-mix(in srgb, var(--glt-accent, #7c3aed) 16%, transparent);
+}
+html.glt-skin.glt-dark {
+    --glt-shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 8px 28px rgba(0, 0, 0, .28);
+    --glt-shadow-lg: 0 16px 48px rgba(0, 0, 0, .55);
+}
+html.glt-skin body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+html.glt-skin :focus-visible { outline-color: var(--glt-accent); }
+
+/* =========================================================================
+   Cartes : widgets, panneaux, modales, menus
+   ========================================================================= */
+html.glt-f-cards .react-grid-item > :not(.react-resizable-handle):first-child,
+html.glt-f-cards :is([class*="WidgetFrame"], [class*="WidgetContainer"], [class*="SearchBar__Container"], [class*="SearchBar"][class*="Wrapper"], .panel, .well):not(.react-grid-item *) {
+    border-radius: var(--glt-r) !important;
+    box-shadow: 0 0 0 1px var(--glt-line), var(--glt-shadow) !important;
+    border-color: transparent !important;
+    overflow: hidden;
+}
+html.glt-f-cards .react-grid-item.react-draggable-dragging > :first-child { box-shadow: 0 0 0 1px var(--glt-accent), var(--glt-shadow-lg) !important; }
+html.glt-f-cards .react-grid-item > .react-grid-placeholder,
+html.glt-f-cards .react-grid-placeholder { border-radius: var(--glt-r); background: var(--glt-accent-soft) !important; opacity: 1 !important; }
+html.glt-f-cards [class*="WidgetHeader"] { font-weight: 600; letter-spacing: .005em; }
+
+html.glt-f-cards .modal-content,
+html.glt-f-cards [class*="mantine-Modal-content"] {
+    border-radius: calc(var(--glt-r) * 1.3) !important; border: 1px solid var(--glt-line) !important; box-shadow: var(--glt-shadow-lg) !important; overflow: hidden;
+}
+html.glt-f-cards .modal-header { border-bottom-color: var(--glt-line); }
+html.glt-f-cards .modal-footer { border-top-color: var(--glt-line); }
+
+html.glt-f-cards :is(.dropdown-menu, .popover, [class*="mantine-Popover-dropdown"], [class*="mantine-Menu-dropdown"], [class*="mantine-Combobox-dropdown"]) {
+    border-radius: var(--glt-r-sm) !important; border: 1px solid var(--glt-line) !important; box-shadow: var(--glt-shadow-lg) !important;
+}
+html.glt-f-cards .dropdown-menu { padding: 4px !important; }
+html.glt-f-cards .dropdown-menu > li > a,
+html.glt-f-cards .dropdown-menu > li > button { border-radius: calc(var(--glt-r-sm) - 2px); padding-top: 5px; padding-bottom: 5px; }
+html.glt-f-cards .dropdown-menu .divider { margin: 4px 2px; background-color: var(--glt-line); }
+html.glt-f-cards .tooltip-inner { border-radius: var(--glt-r-sm); padding: 5px 9px; }
+
+/* Actions des widgets visibles au survol */
+html.glt-f-quiet .react-grid-item [class*="WidgetHeader"] :is(button, a, [role="button"], .btn) { opacity: .4; transition: opacity .15s; }
+html.glt-f-quiet .react-grid-item:hover [class*="WidgetHeader"] :is(button, a, [role="button"], .btn),
+html.glt-f-quiet .react-grid-item [class*="WidgetHeader"] :is(button, a, [role="button"], .btn):focus-visible { opacity: 1; }
+
+/* =========================================================================
+   Boutons, badges
+   ========================================================================= */
+html.glt-f-buttons :is(.btn, [class*="mantine-Button-root"], [class*="mantine-ActionIcon-root"]) {
+    border-radius: var(--glt-r-sm);
+    background-image: none !important;
+    text-shadow: none !important;
+    font-weight: 500;
+    transition: background-color .12s, border-color .12s, color .12s, box-shadow .12s, transform .06s;
+}
+html.glt-f-buttons .btn:not(.btn-link) { box-shadow: 0 1px 1px rgba(0, 0, 0, .06); }
+html.glt-f-buttons .btn:active, html.glt-f-buttons .btn.active { transform: translateY(1px); box-shadow: none; }
+html.glt-f-buttons .btn:focus-visible { outline: 2px solid var(--glt-accent); outline-offset: 2px; }
+html.glt-f-buttons :is(.btn-primary, .btn-success, .btn-info):not(.btn-link) { box-shadow: 0 1px 2px rgba(0, 0, 0, .15), inset 0 1px 0 rgba(255, 255, 255, .08); }
+html.glt-f-buttons :is(.label, .badge, [class*="mantine-Badge-root"]) {
+    border-radius: 999px; font-weight: 600; letter-spacing: .02em; padding-left: .65em; padding-right: .65em;
+}
+
+/* =========================================================================
+   Champs de saisie (dont l'éditeur de requête)
+   ========================================================================= */
+html.glt-f-inputs :is(.form-control, .input-group-addon, [class*="mantine-Input-input"], select.form-control) {
+    border-radius: var(--glt-r-sm);
+    transition: border-color .12s, box-shadow .12s;
+    box-shadow: none;
+}
+html.glt-f-inputs .input-group > .form-control:not(:first-child),
+html.glt-f-inputs .input-group > .input-group-addon:not(:first-child) { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+html.glt-f-inputs .input-group > .form-control:not(:last-child),
+html.glt-f-inputs .input-group > .input-group-addon:not(:last-child) { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+html.glt-f-inputs :is(.form-control, [class*="mantine-Input-input"]):focus {
+    border-color: var(--glt-accent) !important;
+    box-shadow: 0 0 0 3px var(--glt-accent-soft) !important;
+    outline: none;
+}
+html.glt-f-inputs .ace_editor { border-radius: var(--glt-r-sm); }
+html.glt-f-inputs :is([class*="QueryInput"], [class*="SearchBar"] [class*="Container"]):has(> .ace_editor) { border-radius: var(--glt-r-sm); }
+html.glt-f-inputs :is([class*="QueryInput"], div):has(> .ace_editor.ace_focus) { box-shadow: 0 0 0 3px var(--glt-accent-soft); border-color: var(--glt-accent) !important; }
+html.glt-f-inputs .ace_editor .ace_cursor { color: var(--glt-accent) !important; border-left-color: var(--glt-accent) !important; }
+
+/* =========================================================================
+   Navigation (barre du haut repérée par le script)
+   ========================================================================= */
+html.glt-f-nav [data-glt-role="nav"] {
+    background-color: color-mix(in srgb, var(--glt-surface) 82%, transparent) !important;
+    -webkit-backdrop-filter: saturate(1.5) blur(10px);
+    backdrop-filter: saturate(1.5) blur(10px);
+    border-bottom: 1px solid var(--glt-line) !important;
+    box-shadow: none !important;
+}
+html.glt-f-nav [data-glt-role="nav"] :is(.nav > li > a, .navbar-nav > li > a) {
+    border-radius: var(--glt-r-sm);
+    margin-top: 8px; margin-bottom: 8px; padding-top: 7px !important; padding-bottom: 7px !important;
+    transition: background-color .12s, color .12s;
+}
+html.glt-f-nav [data-glt-role="nav"] :is(.nav > li > a, .navbar-nav > li > a):hover { background-color: var(--glt-tint) !important; }
+html.glt-f-nav [data-glt-role="nav"] :is(.nav > li.active > a, .navbar-nav > .active > a, a[aria-current="page"]) {
+    background-color: var(--glt-accent-soft) !important;
+    color: var(--glt-accent) !important;
+    border-bottom-color: transparent !important;
+}
+html.glt-f-nav [data-glt-role="nav"] .navbar-brand { opacity: .95; }
+
+/* Barre latérale du Search : icônes plus aérées */
+html.glt-f-nav [data-glt-role="sidebar"] { border-right: 1px solid var(--glt-line); box-shadow: none !important; }
+html.glt-f-nav [data-glt-role="sidebar"] :is(button, a, [role="button"]) { border-radius: var(--glt-r-sm); }
+
+/* =========================================================================
+   Barres de défilement
+   ========================================================================= */
+html.glt-f-scrollbars, html.glt-f-scrollbars * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--glt-muted) 40%, transparent) transparent;
+}
+
+/* =========================================================================
+   Tableaux
+   ========================================================================= */
+html.glt-f-tables :is(table[class*="MessageTable"], .table, table[class*="DataTable"], [class*="DataTable"] table) > thead > tr > th {
+    background-color: var(--glt-surface) !important;
+    color: var(--glt-muted) !important;
+    font-size: .92em; font-weight: 600; letter-spacing: .01em;
+    border-bottom: 1px solid var(--glt-line) !important;
+    border-top: none !important;
+}
+html.glt-f-tables :is(table[class*="MessageTable"], .table, table[class*="DataTable"]) td { font-variant-numeric: tabular-nums; border-color: var(--glt-line) !important; }
+html.glt-f-tables table[class*="MessageTable"] a { text-underline-offset: 2px; }
+
+html.glt-f-sticky :is(table[class*="MessageTable"], .table, table[class*="DataTable"], [class*="DataTable"] table) > thead > tr > th {
+    position: sticky; top: 0; z-index: 3;
+    box-shadow: inset 0 -1px 0 var(--glt-line);
+}
+html.glt-f-sticky.glt-f-tables :is(table[class*="MessageTable"], .table) > thead > tr > th { background-color: var(--glt-surface) !important; }
+
+html.glt-f-hover tbody[class*="MessageTableEntry"]:hover > tr > td,
+html.glt-f-hover .table > tbody > tr:hover > td { background-color: color-mix(in srgb, var(--glt-accent) 7%, transparent); }
+html.glt-f-zebra tbody[class*="MessageTableEntry"]:nth-of-type(even) > tr > td,
+html.glt-f-zebra .table > tbody > tr:nth-of-type(even) > td { background-color: var(--glt-tint); }
+
+html.glt-f-level tbody[data-glt-level] > tr > td:first-child { box-shadow: inset 3px 0 0 var(--glt-lv); }
+html.glt-f-level tbody[data-glt-level] > tr > td { background-color: color-mix(in srgb, var(--glt-lv) var(--glt-lv-mix, 8%), transparent); }
+html.glt-f-level tbody[data-glt-level="error"] { --glt-lv: var(--glt-danger); }
+html.glt-f-level tbody[data-glt-level="warn"] { --glt-lv: var(--glt-warning); --glt-lv-mix: 7%; }
+html.glt-f-level tbody[data-glt-level="debug"] { --glt-lv: var(--glt-muted); --glt-lv-mix: 0%; }
+html.glt-f-level tbody[data-glt-level="info"] > tr > td { background-color: transparent; }
+html.glt-f-level tbody[data-glt-level="info"] > tr > td:first-child { box-shadow: none; }
+
+html.glt-f-compact :is(table[class*="MessageTable"], .table) > tbody > tr > td { padding-top: 3px !important; padding-bottom: 3px !important; line-height: 1.35; }
+html.glt-f-compact :is(table[class*="MessageTable"], .table) > thead > tr > th { padding-top: 5px !important; padding-bottom: 5px !important; }
+
+/* =========================================================================
+   Mise en page
+   ========================================================================= */
+html.glt-f-wide .container { width: auto !important; max-width: none !important; }
+html.glt-f-throughput [data-glt-role="throughput"] { display: none !important; }
+
+/* Mode focus : seule la zone de contenu reste */
+html.glt-skin.glt-focus [data-glt-role="nav"],
+html.glt-skin.glt-focus [data-glt-role="sidebar"] { display: none !important; }
+html.glt-skin.glt-focus body { padding-top: 0 !important; }
+html.glt-skin.glt-focus [data-glt-role="offset-top"] { padding-top: 0 !important; margin-top: 0 !important; top: 0 !important; }
+html.glt-skin.glt-focus [data-glt-role="offset-left"] { padding-left: 0 !important; margin-left: 0 !important; left: 0 !important; }

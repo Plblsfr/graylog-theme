@@ -123,3 +123,25 @@ textarea {
     display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding: 8px 14px;
     border-top: 1px solid var(--border); font-size: 11px; color: var(--muted);
 }
+
+/* Actions (v2) */
+.actions { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.actions.disabled { opacity: .4; pointer-events: none; }
+.action {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 1px; padding: 8px 10px; text-align: left;
+    border: 1px solid var(--border); border-radius: 10px; background: var(--surface); cursor: pointer;
+    transition: border-color .12s, transform .08s;
+}
+.action:hover { border-color: var(--accent); }
+.action:active { transform: translateY(1px); }
+.action b { font-weight: 600; font-size: 12.5px; }
+.action small { font-size: 11px; }
+.action.primary { flex-direction: row; align-items: center; gap: 10px; padding: 10px 12px; background: color-mix(in srgb, var(--accent) 14%, var(--surface)); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+.action.primary .a-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: var(--accent); color: var(--on-accent); font-size: 15px; flex: none; }
+.action.primary .a-text { display: flex; flex-direction: column; }
+.action.primary b { font-size: 13px; }
+.action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.mini-switch { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted); cursor: pointer; }
+.mini-switch input { accent-color: var(--accent); margin: 0; }
+.foot a { color: var(--muted); }
+.foot a:hover { color: var(--text); }
