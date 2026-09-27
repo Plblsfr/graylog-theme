@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Graylog Theme",
+  "version": "1.0.0",
+  "description": "Change le thème de Graylog : palettes prêtes à l'emploi ou personnalisées, polices, densité, CSS perso.",
+  "permissions": ["storage", "scripting"],
+  "optional_host_permissions": ["https://*/*", "http://*/*"],
+  "background": { "service_worker": "background.js" },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Graylog Theme",
+    "default_icon": { "16": "icons/16.png", "32": "icons/32.png", "48": "icons/48.png" }
+  },
+  "icons": { "16": "icons/16.png", "32": "icons/32.png", "48": "icons/48.png", "128": "icons/128.png" },
+  "commands": {
+    "toggle-theme": {
+      "suggested_key": { "default": "Alt+Shift+T" },
+      "description": "Activer / désactiver le thème"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://graylog.moveon-hotelbb.com/*"],
+      "js": ["themes.js", "engine.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
